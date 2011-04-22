@@ -1,0 +1,71 @@
+/*
+ *  common.h
+ *  
+ *
+ *  Created by Gaurav Khanna on 02/01/09.
+ *  Copyright 2009 xShad0w. All rights reserved.
+ *  Contact: Gauravk92@gmail.com
+ *
+ *  This file is part of iphone-quickreply or QuickReply.
+ */
+
+#define DLOG
+#import <debug.h>
+#define IPHONE_OS_4
+
+#define VER1_(x)    #x
+#define VER_(x)	 VER1_(x)
+#define TWEAK_VERSION   VER_(quickreply4_TWEAK_VERSION)
+
+#import <SpringBoard/SpringBoard-Structs.h>
+#import <CaptainHook/CaptainHook.h>
+
+#define GAURAV_UDID @"5f29cdb45d5bf951924cf50c9870fff49617d554"//5f29cdb45d5bf951924cf50c9870fff49617d554
+#define BEN_UDID    @"9f0ace9c68d230543ec8fb8454b1c2b7964ff6bc"//9f0ace9c68d230543ec8fb8454b1c2b7964ff6bc
+#define APP_ID "net.gauravkhanna.QuickReply"
+#define PLIST_PATH @"/var/mobile/Library/Preferences/net.gauravkhanna.QuickReply.plist"
+
+#define NSLocalStringSB(key) NSLocalizedStringFromTableInBundle(key, @"SpringBoard", \
+[NSBundle bundleWithPath:@"/System/Library/CoreServices/SpringBoard.app/"], @"")
+
+#define NSLocalStringCK(key) NSLocalizedStringFromTableInBundle(key, @"ChatKit", \
+[NSBundle bundleWithPath:@"/System/Library/PrivateFrameworks/ChatKit.framework"],@"")
+
+#define IS_DEVELOPER_DEVICE [[UIDevice currentDevice].uniqueIdentifier isEqualToString:GAURAV_UDID]
+
+#define MARK_MESSAGE_READ(message) \
+[[objc_getClass("SBSMSManager") sharedSMSManager] markMessageAsRead:message]; \
+[[objc_getClass("SBSMSManager") sharedSMSManager] updateSMSBadges];
+
+#define QR_IS_ACTIVE !([[QRController sharedController] hasActiveInstance] || [[QRWindow sharedWindow] isHidden] == true)
+
+#define PREF(key) [[[NSDictionary dictionaryWithContentsOfFile:PLIST_PATH] objectForKey:key] boolValue]
+
+#define $(class) objc_getClass(#class)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+    
+    ABAddressBookRef ABCGetSharedAddressBook();
+    
+    UIImage * _UIImageWithName(NSString *name);
+    
+    CFStringRef CTCallCopyAddress(CFAllocatorRef, CTCallRef);
+    CFUUIDRef CTCallCopyUUID(CFAllocatorRef, CTCallRef);
+    CFTypeRef CTCallCopyName(CFAllocatorRef, CTCallRef);
+    
+#ifdef __cplusplus
+}
+#endif
+//extern "C" long CTCallGetID(CTCallRef);
+
+#ifdef ROCK
+#import <Rock/RockLicensing.h>
+//#import "QRLibraryRock.mm"
+#endif
+#ifdef OLD
+#import "QRController.m"
+#import "QRWindow.m"
+#import "QRView.m"
+#endif

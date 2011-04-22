@@ -1,0 +1,12 @@
+Package: ckquickreplyrock
+Priority: optional
+Section: Messaging
+Maintainer: Gaurav Khanna <gauravk92@gmail.com>
+Architecture: iphoneos-arm
+Version: 1.6.5
+Description: The best QuickReply implementation on the market! Allows you to reply to an SMS/MMS from /anywhere/ with an awesome interface
+Name: QuickReply for SMS
+Pre-Depends: firmware (>= 3.0)
+Depends: mobilesubstrate, preferenceloader
+Depiction: http://gauravkhanna.net/cydia/ckquickreply/index.html
+Homepage: http://gauravkhanna.net/cydia/index.html

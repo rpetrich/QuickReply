@@ -1,0 +1,84 @@
+{
+    entry = {
+        cell = PSLinkCell;
+        icon = "/Applications/MobileSMS.app/Icon-Small.png";
+        label = QuickReply;
+    };
+    items = (
+        {
+            cell = PSGroupCell;
+            footerText = "Allows double tap gesture in lockscreen to open QuickReply window, displaying message content and giving ability to reply without passcode entry.";
+        },
+        {
+            cell = PSSwitchCell;
+            default = YES;
+            defaults = "net.gauravkhanna.QuickReply";
+            key = ShowOnLockScreen;
+            label = "Show On LockScreen";
+        },
+        {
+            cell = PSGroupCell;
+            footerText = "Replaces View button with Call in an alert";
+        },
+        {
+            cell = PSSwitchCell;
+            default = NO;
+            defaults = "net.gauravkhanna.QuickReply";
+            key = CallButton;
+            label = "Use Call Button";
+        },
+        {
+            cell = PSGroupCell;
+            footerText = "Changes default keyboard appearance to black transparent keyboard.";
+        },
+        {
+            cell = PSSwitchCell;
+            default = NO;
+            defaults = "net.gauravkhanna.QuickReply";
+            key = AlertKeyboard;
+            label = "Use Alert Keyboard";
+        },
+        {
+            cell = PSGroupCell;
+            footerText = "Adds contact picture in SMS Alerts";
+        },
+        {
+            cell = PSSwitchCell;
+            default = NO;
+            defaults = "net.gauravkhanna.QuickReply";
+            key = ContactPicture;
+            label = "Show Contact Picture";
+        },        
+        {
+            cell = PSGroupCell;
+            footerText = "Hides Load Earlier Button from QuickReply";
+        },
+        {
+            cell = PSSwitchCell;
+            default = YES;
+            defaults = "net.gauravkhanna.QuickReply";
+            key = LoadEarlierBtn;
+            label = "Load Earlier Button";
+        },
+        {
+            cell = PSGroupCell;
+            footerText = "Removes ability to reorient to Landscape";
+        },
+        {
+            cell = PSSwitchCell;
+            default = YES;
+            defaults = "net.gauravkhanna.QuickReply";
+            key = Landscape;
+            label = "Allow Landscape";
+        },
+        {
+            cell = PSStaticValueCell;
+            label = "\n\n";
+        },
+        {
+            cell = PSGroupCell;
+            footerText = "QuickReply v1.6.4 © 2009-2010\nGaurav Khanna <gauravk92@gmail.com>";
+        },
+    );
+    title = QuickReply;
+}
