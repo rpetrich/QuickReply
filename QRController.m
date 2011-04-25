@@ -10,6 +10,7 @@
  */
 
 #import "QRController.h"
+#import "singleton.h"
 
 @implementation QRController
 

@@ -9,7 +9,10 @@
  *  This file is part of iphone-quickreply or QuickReply.
  */
 
+#import <UIKit/UIKit2.h>
+
 #import "QRWindow.h"
+#import "singleton.h"
 
 @implementation QRWindow
 
@@ -50,7 +53,6 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
 }
 
 + (void)setAccelerometerState:(BOOL)state {
-    DLogFunc();
     Class $SBAccelerometerInterface = $(SBAccelerometerInterface);
 	SBAccelerometerInterface* interface = [$SBAccelerometerInterface sharedInstance];
 	SBAccelerometerClient* client = [CHIvar(interface, _clients, NSMutableArray *) lastObject];
@@ -136,9 +138,9 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
 - (void)becomeKeyWindowAnimatedWithOrientation:(UIInterfaceOrientation)initOrientation {
     [self setAlpha:0];
     [_kbWindow setAlpha:0];
-    _kbWindow = [UIAutoRotatingWindow sharedPopoverHostingWindow];
-    [[UIAutoRotatingWindow sharedPopoverHostingWindow] setHidden:FALSE];
-    [[UIAutoRotatingWindow sharedPopoverHostingWindow] makeKeyAndVisible];
+    _kbWindow = [objc_getClass("UIAutoRotatingWindow") sharedPopoverHostingWindow];
+    [_kbWindow setHidden:FALSE];
+    [_kbWindow makeKeyAndVisible];
     [self makeKeyAndVisible];
     
     [self windowRotateToInterfaceOrientation:initOrientation duration:0.0 raw:FALSE];
@@ -215,21 +217,17 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
 }
 
 - (BOOL)shouldWindowUseOnePartInterfaceRotationAnimation:(UIWindow*)window { 
-    DLogFunc();
     return NO; 
 }
 - (UIView*)rotatingContentViewForWindow:(UIWindow*)window { 
-    DLogFunc();
     return self; 
 }
 - (void)setAutorotates:(BOOL)autorotates forceUpdateInterfaceOrientation:(BOOL)orientation {
-    DLogFunc();
 }
 - (void)windowRotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration raw:(BOOL)raw {
 	//BOOL wasLandscape = UIInterfaceOrientationIsLandscape(_orientation), 
     BOOL isLandscape = UIInterfaceOrientationIsLandscape(interfaceOrientation);
     if(PREF(@"Landscape")) {
-        DLogFunc();
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:duration];
         [self updateForOrientation:interfaceOrientation];
@@ -298,9 +296,6 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
 #pragma mark IMAGE_PICKER
 
 - (void)showPickerOfType:(UIImagePickerControllerSourceType)sourceType delegate:(id)delegate {
-    DLogBOOL([UIImagePickerController isSourceTypeAvailable:sourceType]);
-    DLogObject(self);
-    DLogObject(delegate);
      if([UIImagePickerController isSourceTypeAvailable:sourceType]) {
         //_pickerDelegate = delegate;
         _picker = [[UIImagePickerController alloc] init];
@@ -330,7 +325,6 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
          //[UIView setAnimationDuration:0.5];
          //[_picker.view setAlpha:1];
          //[UIView commitAnimations];
-         DLogRetain(_picker);
          //[_picker release];
     }else {
         
@@ -373,13 +367,9 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
     [_picker.view setAlpha:0];
     [UIView commitAnimations];*/
     [self imagePickerControllerDidCancel:picker];
-    DLogRetain(_picker.view);
-    DLogRetain(_picker);
     UIImage *origImage = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
-    //DLogObject(origImage);
     NSData *theData = UIImageJPEGRepresentation(origImage, 0.5f);
     //[origImage release];
-    //DLogFunc();
     Class $CKMediaObjectManager = $(CKMediaObjectManager);
     id mediaObject = [[$CKMediaObjectManager sharedInstance] newMediaObjectForData:theData 
                                                                           mimeType:@"image/jpeg" 
@@ -389,9 +379,6 @@ MAKE_SINGLETON(QRWindow, sharedWindow);
     [mediaObject release];
     [[[(QRView*)_pickerDelegate messageEntryView] entryField] insertMessagePart:mediaObjectPart];
     [mediaObjectPart release];
-    //DLogRetain(theImage);
-    //DLogRetain(mediaObject);
-    //DLogRetain(mediaObjectPart);
     
 }
 

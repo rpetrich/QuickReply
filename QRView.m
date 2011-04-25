@@ -44,8 +44,6 @@
         [self refreshStatusBarHeight];
     }
     
-    DLogFunc();
-    
     self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.55];
     self.exclusiveTouch = true;
     self.autoresizesSubviews = true;
@@ -71,8 +69,6 @@
     [_fakeNavBar addSubview:titleLabel];
     [titleLabel release];
     
-    DLogFunc();
-    
     float scrollHeight = (480.0-[CKMessageEntryView defaultHeight]-_statusBarHeight-216.0);
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 0.0, _statusBarHeight, 320.0, scrollHeight)];
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -81,8 +77,6 @@
     _scrollView.contentInset = _scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(44.0,0.0,0.0,0.0);
     _scrollView.autoresizesSubviews = TRUE;
     //_scrollView.contentOffset = CGPointMake(0.0,-5.0);
-    
-    DLogFunc();
     
     NSDictionary *mSMSsettings = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.apple.MobileSMS.plist"];
     //------Used to see if MMS is enabled, if so add's media button on left side-------
@@ -97,8 +91,6 @@
                                                                                  [CKMessageEntryView defaultHeight])];
     //---------------------------------------------------------------------------------
     
-    DLogFunc();
-    
     _messageEntryView.userInteractionEnabled = true;
     _messageEntryView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_messageEntryView setDelegate:self];
@@ -107,8 +99,6 @@
     [contentEntryView setMessageComposition:[CKMessageComposition newComposition]];
     [self addSubview:_messageEntryView];
     [contentEntryView makeActive];
-    
-    DLogFunc();
     
     self.exclusiveTouch = TRUE;
     
@@ -125,8 +115,6 @@
                  forControlEvents:UIControlEventTouchUpInside];
         _balloonY = _balloonY+loadEarlierBtn.frame.size.height+5.0;
     }
-    
-    DLogFunc();
     
     //------Used to take any alert items behind selected and dismiss/add here----------
     SBAlertItemsController *alertController = [$(SBAlertItemsController) sharedInstance];
@@ -201,12 +189,9 @@
     Class $CKSMSService = $(CKSMSService);
     NSArray *msgs;
     for(int i = 1;i < 6;i++) {
-        DLogBOOL(loadMore);
         if(loadMore) {
             msgs = [[$CKSMSService sharedSMSService] messagesForConversation:conv limit:(i+2+_messagesLoaded) moreToLoad:&loadMore];
-            DLogObject(msgs);
             [self addMessage:[msgs objectAtIndex:1] earlierMessage:true animated:false];
-            DLogINT(i);
         }
     }
     _messagesLoaded+=5;
@@ -236,7 +221,6 @@
         [self setFrame:rect];
         
         [self refreshStatusBarHeight];
-        DLogBOOL(raw);
         _statusBarHeight = raw ? 0.0 : _statusBarHeight;
         
         [_scrollView setFrame:CGRectMake(0.0, _statusBarHeight, rect.size.width, rect.size.height-_messageEntryView.frame.size.height)];
@@ -313,7 +297,6 @@
                     if([part isKindOfClass:$(CKTextMessagePart)]) {
                         [self addMessage:[part text] animated:animated];
                     } else {
-                        //DLogClass([[part mediaObject] balloonPreviewClassWithPreviewData:[part previewData]]);
                         
                         Class $CKBalloonClass = [[part mediaObject] balloonPreviewClassWithPreviewData:[part previewData]];
                         CKImageBalloonView *balloon = [[$CKBalloonClass alloc] init];
@@ -340,10 +323,8 @@
                             balloonButton.transform = CGAffineTransformMakeScale(-1.0, 1.0);
                             
                             if(previous) {
-                                DLogFunc();
                                 tBalloonY += _balloonY;
                                 _balloonY = 38.0; // 5.0 + _loadEarlierButton.height + 5.0
-                                DLogFunc();
                                 for (id aSubview in [_scrollView subviews]) {
                                     if([aSubview isKindOfClass:$(CKBalloonView)] || \
                                        [aSubview isKindOfClass:$(UIButton)]) {
@@ -390,10 +371,8 @@
             balloonHeight = [CKSimpleBalloonView minimumBubbleHeight];
         int tBalloonY = 0;
         if(previous) {
-            DLogFunc();
             tBalloonY += _balloonY;
             _balloonY = 38.0; // 5.0 + _loadEarlierButton.height + 5.0
-            DLogFunc();
             for(id aSubview in [_scrollView subviews]) {
                 if([aSubview isKindOfClass:$(CKBalloonView)] || [aSubview isKindOfClass:$(UIButton)]) {
                     CGRect tRect = [aSubview frame];
@@ -422,8 +401,6 @@
         _balloonY = _balloonY+balloonHeight;
         
         [_scrollView addSubview:balloon];
-        DLogRetain(balloon);
-        DLogRetain(_scrollView);
         [balloon release];
     }
     if(!previous)
@@ -439,7 +416,6 @@
     float desiredScrollOffset = 0.0f;
     int scrollHeight = (self.frame.size.height-_fakeNavBar.frame.size.height-_messageEntryView.frame.size.height-_statusBarHeight);
     if(scrollHeight < _balloonY) {
-        DLogFunc();
         [_scrollView setContentSize:CGSizeMake(self.frame.size.width, _balloonY+5.0)];
         _fixedScrollView = false;
         
@@ -456,7 +432,6 @@
                 desiredScrollOffset = (_scrollView.contentSize.height-_scrollView.frame.size.height);
             //else
             //    desiredScrollOffset = (-1*_fakeNavBar.frame.size.height);
-            DLogObject(_fakeNavBar);
         }
     }else if(setScroll)
         desiredScrollOffset = (-1*_fakeNavBar.frame.size.height);
@@ -481,12 +456,9 @@
 
 - (BOOL)messageEntryView:(CKMessageEntryView *)messageEntryView contentSizeChanged:(struct CGSize)size animate:(BOOL)animate {
     //UIApplication *app = [UIApplication sharedApplication];
-    DLog(@" %f %f %i %f", messageEntryView.frame.size.height, size.height, _statusBarHeight, _fakeNavBar.frame.size.height);
     float diff = size.height - messageEntryView.frame.size.height;
     float sizeHeight = (diff > 20.0) ? 180+_statusBarHeight : size.height;
     if(messageEntryView.frame.size.height!=size.height && (self.frame.size.height-sizeHeight)>= (_statusBarHeight+_fakeNavBar.frame.size.height)) {
-        DLog(@"diff:%f",diff);
-        DLog(@"scrollY:%f",_scrollView.frame.origin.y);
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:.1];
         [messageEntryView setFrame:CGRectMake(messageEntryView.frame.origin.x, \
@@ -504,7 +476,6 @@
                 _scrollView.contentInset = _scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(desiredEdgeInsetTop,0.0,0.0,0.0);
             //float desiredScrollOffset = _scrollView.contentSize.height-_fakeNavBar.frame.size.height-(180.0-_statusBarHeight);
             float desiredScrollOffset = _scrollView.contentSize.height-_scrollView.frame.size.height;
-            //DLog(@" contentOffset:%f desired:%f",_scrollView.contentOffset.y,desiredScrollOffset);
             if(_scrollView.contentOffset.y != desiredScrollOffset)
                 [_scrollView setContentOffset:CGPointMake(0.0,desiredScrollOffset) animated:true];
         }
@@ -524,14 +495,10 @@
                 [_keyWindow startSendingAnimated:true];
 #endif
             CKService *service = [CKSMSService sharedSMSService];
-            DLogObject(service);
             CKSMSMessage *msg = [service newMessageWithComposition:[[messageEntryView entryField] messageComposition] 
                                                    forConversation:[[(QRView*)[messageEntryView delegate] message] conversation]];
-            DLogObject(msg);
             [msg markAsRead];
-            DLogFunc();
             [service sendMessage:msg];
-            DLogFunc();
         }
     }
     [self resignAnimated:[NSNumber numberWithBool:true]];

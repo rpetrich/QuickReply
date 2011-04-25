@@ -9,15 +9,14 @@
 
 #import <UIKit/UIKit.h>
 #import <ChatKit/ChatKit.h>
-#import <singleton.h>
 
 #import "QRView.h"
 
-@class QRView;
+@class UIAutoRotatingWindow;
 
 @interface QRWindow : UIWindow <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate> {
     UIKeyboard *_keyboard;
-    UIAutoRotatingWindow *_kbWindow; // Weak Ivar;
+    UIWindow *_kbWindow; // Weak Ivar;
     UIImagePickerController *_picker;
     CGRect _kbRectPortrait;
     CGRect _kbRectLandscape;

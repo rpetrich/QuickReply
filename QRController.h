@@ -8,7 +8,6 @@
  */
 
 #import <UIKit/UIKit.h>
-#import <singleton.h>
 
 #import "QRView.h"
 

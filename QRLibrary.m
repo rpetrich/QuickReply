@@ -118,7 +118,6 @@ CHMethod(1, void, SBAlertItemsController, activateAlertItem, id, alertItem) {
         //QRView *_view = [QRView displayWithSBSMSAlertItem:alertItem]; //immediatly display quickreply without alert
         _SBAlertItemsController$activateAlertItem$(self,sel,alertItem); //override to display alert despite existing QR view
 #else
-        DLogINT([[alertItem alertSheet] numberOfRows]);
         QRView *view = [[QRController sharedController] viewForAddressInInstances:[alertItem address]];
         [view addMessage:CHIvar(alertItem, _message, CKMessage *) animated:true];
         if([[$(SBAwayController) sharedAwayController] isLocked]){
@@ -127,7 +126,6 @@ CHMethod(1, void, SBAlertItemsController, activateAlertItem, id, alertItem) {
         }
 #endif
 #ifdef IPHONE_OS_4
-        DLogFunc();
         [CLASS(SBSMSAlertItem) playMessageReceived];
 #else
         [alertItem willPresentAlertSheet:nil];
@@ -173,13 +171,11 @@ CHMethod(1, CGSize, SMSAlertSheet, sizeThatFits, CGSize, size) {
 
 CHMethod(0, void, SMSAlertSheet, layoutSubviews) {
     CHSuper(0, SMSAlertSheet, layoutSubviews);
-    DLogINT([self numberOfRows]);
     if(PREF(@"ContactPicture") && (![self viewWithTag:77])) {
         int uid = [[[CHIvar([self delegate], _message, CKMessage *) conversation] recipient] addressBookUID];
         if(uid != -1){
             ABAddressBookRef addressBook = ABAddressBookCreate();
             ABRecordRef record = ABAddressBookGetPersonWithRecordID(addressBook, uid);
-            DLogCFRetain(record);
             CFRetain(record);
             if(ABPersonHasImageData(record)){
                 UILabel *titleLabel = CHIvar(self, _titleLabel, UILabel *);
@@ -408,7 +404,6 @@ CHMethod(0, void, SBAwayItemsView, drawItems) {
     if(PREF(@"ShowOnLockScreen") && [displayedItems count] > 1) {
         if([[self subviews] count] == [displayedItems count])
             return;
-        DLogFunc();
         [[self subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         int cumulativeY = 12.0;
         NSInteger index = 0;
@@ -538,8 +533,6 @@ static __attribute__((constructor)) void QuickReplyInit() {
         
         CHHook(0, SBAwayItemsView, layoutSubviews);
         CHHook(0, SBAwayItemsView, drawItems);
-        
-        DLogFunc();
         
         if ([[settings objectForKey:@"ShowOnLockScreen"] boolValue]){
             CHHook(2, SMSAlertSheet, touchesEnded, withEvent);

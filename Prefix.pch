@@ -10,7 +10,6 @@
  */
 
 #define DLOG
-#import <debug.h>
 #define IPHONE_OS_4
 
 #define VER1_(x)    #x
